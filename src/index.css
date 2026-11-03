@@ -1,0 +1,360 @@
+:root {
+  --felt: #0f4a37;
+  --felt-dark: #0a3527;
+  --felt-light: #17634a;
+  --ink: #f3f6f4;
+  --ink-muted: #b9cdc4;
+  --gold: #f2c14e;
+  --correct: #5fd39a;
+  --wrong: #ff9a8b;
+  --card-face: #ffffff;
+  --card-black: #1b2420;
+  --card-red: #c8202f;
+
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--felt-dark);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--felt-dark);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+h1 {
+  margin: 0 0 12px;
+  font-size: 1.4rem;
+}
+
+nav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+nav button {
+  padding: 10px 4px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--felt);
+  font-size: 0.9rem;
+}
+
+nav button[aria-current='page'] {
+  background: var(--gold);
+  color: var(--felt-dark);
+  font-weight: 600;
+}
+
+.drill {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.prompt {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+.board,
+.hole-cards {
+  display: flex;
+  justify-content: center;
+  padding: 16px 8px;
+  border-radius: 14px;
+  background: var(--felt);
+}
+
+.hole-cards {
+  background: var(--felt-light);
+}
+
+.card-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.card {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 72px;
+  border: 2px solid transparent;
+  border-radius: 7px;
+  background: var(--card-face);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.card-black {
+  color: var(--card-black);
+}
+
+.card-red {
+  color: var(--card-red);
+}
+
+.card-plays {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px var(--gold);
+}
+
+.card-unused {
+  opacity: 0.45;
+}
+
+.seats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.seat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 8px;
+  border: 2px solid transparent;
+  border-radius: 14px;
+  background: var(--felt);
+}
+
+.seat-picked {
+  border-color: var(--ink);
+}
+
+.seat-winner {
+  border-color: var(--gold);
+}
+
+.seat-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.seat-badge {
+  padding: 0 6px;
+  border-radius: 6px;
+  background: var(--gold);
+  color: var(--felt-dark);
+  font-size: 0.75rem;
+}
+
+.seat-hand {
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.primary {
+  width: 100%;
+  padding: 14px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--gold);
+  color: var(--felt-dark);
+  font-weight: 700;
+}
+
+.primary:disabled {
+  background: var(--felt);
+  color: var(--ink-muted);
+}
+
+.feedback {
+  padding: 14px;
+  border-left: 4px solid;
+  border-radius: 10px;
+  background: var(--felt);
+}
+
+.feedback p {
+  margin: 0 0 12px;
+}
+
+.feedback-correct {
+  border-left-color: var(--correct);
+}
+
+.feedback-wrong {
+  border-left-color: var(--wrong);
+}
+
+.feedback .verdict {
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.feedback-correct .verdict {
+  color: var(--correct);
+}
+
+.feedback-wrong .verdict {
+  color: var(--wrong);
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.option {
+  padding: 12px 6px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background: var(--felt);
+}
+
+.option:disabled {
+  color: var(--ink-muted);
+}
+
+.option-chosen {
+  border-color: var(--wrong);
+}
+
+.option-right {
+  border-color: var(--correct);
+  color: var(--ink);
+}
+
+.options-list {
+  grid-template-columns: 1fr;
+}
+
+.options-list .option {
+  padding: 12px 14px;
+  text-align: left;
+}
+
+.question {
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--felt);
+}
+
+.question p {
+  margin: 0;
+}
+
+.question-topic {
+  color: var(--gold);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.question-prompt {
+  font-size: 1.1rem;
+}
+
+.rankings ol {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ranking {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--felt);
+}
+
+.ranking h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.ranking p {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+}
+
+.ranking .card-row {
+  justify-content: flex-start;
+}
+
+.ranking .card {
+  width: 44px;
+  height: 60px;
+  font-size: 1rem;
+}
+
+.score {
+  margin-top: 20px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--felt);
+}
+
+.score h2 {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+}
+
+.score dl {
+  margin: 0;
+}
+
+.score dl div {
+  display: flex;
+  justify-content: space-between;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+}
+
+.score dd {
+  margin: 0;
+}
+
+/* Five cards plus gaps fit a 320px phone at this size. */
+@media (max-width: 380px) {
+  .card {
+    width: 46px;
+    height: 64px;
+    font-size: 1rem;
+  }
+}
