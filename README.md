@@ -1,4 +1,4 @@
-# Poker Trainer
+# Poker 101
 
 A phone-friendly Texas Hold'em study app. Practice reading showdowns and naming hands, with extra reps on the spots that cause arguments at the table: kickers, split pots, and the board playing.
 

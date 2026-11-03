@@ -21,7 +21,7 @@ type Props = {
 export function Home({ drills, score, onOpenDrill, onOpenRankings }: Props) {
   return (
     <div className="home">
-      <h1>Poker Trainer</h1>
+      <h1>Poker 101</h1>
       <section className="home-pitch">
         <h2>Want to practice your poker skills?</h2>
         <p>Pick a drill. Each one is {RUN_LENGTH} rounds, then you'll see what to work on.</p>

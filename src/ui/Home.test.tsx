@@ -24,6 +24,11 @@ const renderHome = (overrides: Partial<Parameters<typeof Home>[0]> = {}) =>
   )
 
 describe('Home', () => {
+  it('carries the app name', () => {
+    renderHome()
+    expect(screen.getByRole('heading', { level: 1, name: 'Poker 101' })).toBeInTheDocument()
+  })
+
   it('invites you to practice and describes each drill', () => {
     renderHome()
     expect(screen.getByRole('heading', { name: 'Want to practice your poker skills?' })).toBeInTheDocument()
