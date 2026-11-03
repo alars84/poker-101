@@ -7,7 +7,7 @@ export function Feedback({
   correct: boolean
   message: string
   nextLabel?: string
-  onNext: () => void
+  onNext?: () => void
 }) {
   return (
     <section className={`feedback ${correct ? 'feedback-correct' : 'feedback-wrong'}`} aria-live="polite">

@@ -4,16 +4,18 @@ import { HAND_CATEGORIES, type HandCategory } from '../domain/hand'
 import { dealNameTheHandRound, isCorrectName } from '../drills/nameTheHand'
 import { CardRow } from './CardView'
 import { Feedback } from './Feedback'
-import { capitalize } from './capitalize'
+import { capitalize } from '../drills/capitalize'
 
 type Props = {
   deal?: typeof dealNameTheHandRound
   onAnswered: (topic: string, correct: boolean) => void
+  isLastRound?: boolean
+  onFinish?: () => void
 }
 
 const STRONGEST_FIRST = [...HAND_CATEGORIES].reverse()
 
-export function NameTheHandDrill({ deal = dealNameTheHandRound, onAnswered }: Props) {
+export function NameTheHandDrill({ deal = dealNameTheHandRound, onAnswered, isLastRound = false, onFinish }: Props) {
   const [round, setRound] = useState(() => deal())
   const [answer, setAnswer] = useState<HandCategory | null>(null)
 
@@ -21,7 +23,8 @@ export function NameTheHandDrill({ deal = dealNameTheHandRound, onAnswered }: Pr
 
   const choose = (category: HandCategory) => {
     setAnswer(category)
-    onAnswered('Name the hand', isCorrectName(round, category))
+    // Filed under the real hand, so the summary can say which hands to review.
+    onAnswered(capitalize(round.hand.category), isCorrectName(round, category))
   }
   const nextHand = () => {
     setRound(deal())
@@ -43,7 +46,8 @@ export function NameTheHandDrill({ deal = dealNameTheHandRound, onAnswered }: Pr
         <Feedback
           correct={isCorrectName(round, answer)}
           message={`Best hand: ${describeHand(round.hand)}.`}
-          onNext={nextHand}
+          nextLabel={isLastRound ? 'See results' : 'Next hand'}
+          onNext={isLastRound ? onFinish : nextHand}
         />
       )}
 

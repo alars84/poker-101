@@ -26,6 +26,16 @@ export class ScoreCard {
     return this.#scores
   }
 
+  /** Topics with at least one miss, the ones to work on first at the top. */
+  missedTopics(): readonly TopicScore[] {
+    const misses = (score: TopicScore) => score.attempts - score.correct
+    return this.#scores
+      .filter((score) => misses(score) > 0)
+      .toSorted(
+        (a, b) => misses(b) - misses(a) || a.correct / a.attempts - b.correct / b.attempts,
+      )
+  }
+
   total(): { correct: number; attempts: number } {
     return {
       correct: this.#scores.reduce((sum, score) => sum + score.correct, 0),

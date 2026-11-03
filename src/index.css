@@ -52,25 +52,75 @@ h1 {
   font-size: 1.4rem;
 }
 
-nav {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-  margin-bottom: 16px;
+.home-pitch {
+  margin: 0 0 16px;
 }
 
-nav button {
-  padding: 10px 4px;
-  border: 0;
-  border-radius: 8px;
+.home-pitch h2 {
+  margin: 0 0 4px;
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.home-pitch p {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+.drill-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.drill-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 14px;
   background: var(--felt);
-  font-size: 0.9rem;
 }
 
-nav button[aria-current='page'] {
-  background: var(--gold);
-  color: var(--felt-dark);
-  font-weight: 600;
+.drill-card h3 {
+  margin: 0 0 2px;
+  font-size: 1.1rem;
+}
+
+.drill-card p {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.95rem;
+}
+
+.link-button {
+  padding: 8px 0;
+  border: 0;
+  background: none;
+  color: var(--gold);
+  text-decoration: underline;
+}
+
+.home .link-button {
+  margin-top: 8px;
+}
+
+.run-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.run-header h1 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.run-header .link-button {
+  flex: none;
+  padding: 4px 0;
 }
 
 .drill {
@@ -282,6 +332,85 @@ nav button[aria-current='page'] {
 
 .question-prompt {
   font-size: 1.1rem;
+}
+
+.progress {
+  margin-bottom: 14px;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+}
+
+.progress-track {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--felt);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--gold);
+  transition: width 0.2s ease;
+}
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.summary h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.summary h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.summary p {
+  margin: 0;
+}
+
+.summary ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.summary li {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--felt);
+}
+
+.summary li p {
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+}
+
+.summary-topic {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.summary-topic span {
+  flex: none;
+  color: var(--wrong);
+  font-size: 0.85rem;
 }
 
 .rankings ol {

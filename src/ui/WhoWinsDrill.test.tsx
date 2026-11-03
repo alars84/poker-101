@@ -116,4 +116,17 @@ describe('WhoWinsDrill', () => {
     expect(screen.queryByText('Correct!')).not.toBeInTheDocument()
     expect(lockIn()).toBeDisabled()
   })
+
+  it('offers the results instead of another hand on the last round', async () => {
+    const user = userEvent.setup()
+    const onFinish = vi.fn()
+    render(<WhoWinsDrill deal={() => kickerRound} onAnswered={() => {}} isLastRound onFinish={onFinish} />)
+
+    await user.click(seat('Ana'))
+    await user.click(lockIn())
+    await user.click(screen.getByRole('button', { name: 'See results' }))
+
+    expect(onFinish).toHaveBeenCalledOnce()
+    expect(screen.queryByRole('button', { name: 'Next hand' })).not.toBeInTheDocument()
+  })
 })

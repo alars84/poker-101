@@ -5,12 +5,14 @@ import { Feedback } from './Feedback'
 type Props = {
   deal?: () => QuizRound
   onAnswered: (topic: string, correct: boolean) => void
+  isLastRound?: boolean
+  onFinish?: () => void
 }
 
 // Lives outside the component so switching tabs doesn't restart the question cycle.
 const sessionQuiz = new RulesQuiz()
 
-export function RulesQuizDrill({ deal = () => sessionQuiz.next(), onAnswered }: Props) {
+export function RulesQuizDrill({ deal = () => sessionQuiz.next(), onAnswered, isLastRound = false, onFinish }: Props) {
   const [round, setRound] = useState(() => deal())
   const [answer, setAnswer] = useState<string | null>(null)
 
@@ -54,8 +56,8 @@ export function RulesQuizDrill({ deal = () => sessionQuiz.next(), onAnswered }: 
         <Feedback
           correct={isCorrectOption(round, answer)}
           message={question.explanation}
-          nextLabel="Next question"
-          onNext={nextQuestion}
+          nextLabel={isLastRound ? 'See results' : 'Next question'}
+          onNext={isLastRound ? onFinish : nextQuestion}
         />
       )}
     </div>

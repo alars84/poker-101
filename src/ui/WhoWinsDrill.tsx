@@ -8,9 +8,11 @@ import { Feedback } from './Feedback'
 type Props = {
   deal?: typeof dealWhoWinsRound
   onAnswered: (topic: string, correct: boolean) => void
+  isLastRound?: boolean
+  onFinish?: () => void
 }
 
-export function WhoWinsDrill({ deal = dealWhoWinsRound, onAnswered }: Props) {
+export function WhoWinsDrill({ deal = dealWhoWinsRound, onAnswered, isLastRound = false, onFinish }: Props) {
   const [round, setRound] = useState(() => deal())
   const [picks, setPicks] = useState<readonly string[]>([])
   const [answered, setAnswered] = useState(false)
@@ -70,7 +72,12 @@ export function WhoWinsDrill({ deal = dealWhoWinsRound, onAnswered }: Props) {
       </div>
 
       {answered ? (
-        <Feedback correct={correct} message={explainShowdown(result)} onNext={nextHand} />
+        <Feedback
+          correct={correct}
+          message={explainShowdown(result)}
+          nextLabel={isLastRound ? 'See results' : 'Next hand'}
+          onNext={isLastRound ? onFinish : nextHand}
+        />
       ) : (
         <button type="button" className="primary" disabled={picks.length === 0} onClick={lockIn}>
           Lock it in

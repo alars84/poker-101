@@ -66,4 +66,16 @@ describe('RulesQuizDrill', () => {
     expect(screen.getByText('Second?')).toBeInTheDocument()
     expect(option('Raise to $8')).toBeEnabled()
   })
+
+  it('offers the results instead of another question on the last round', async () => {
+    const user = userEvent.setup()
+    const onFinish = vi.fn()
+    render(<RulesQuizDrill deal={() => round('Last?')} onAnswered={() => {}} isLastRound onFinish={onFinish} />)
+
+    await user.click(option('Raise to $10'))
+    await user.click(screen.getByRole('button', { name: 'See results' }))
+
+    expect(onFinish).toHaveBeenCalledOnce()
+    expect(screen.queryByRole('button', { name: 'Next question' })).not.toBeInTheDocument()
+  })
 })
