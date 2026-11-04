@@ -23,7 +23,7 @@ export function RankingsChart() {
       <ol>
         {STRONGEST_FIRST.map(({ category, example, note }) => (
           <li key={category} className="ranking">
-            <h2>{capitalize(category)}</h2>
+            <h3>{capitalize(category)}</h3>
             <CardRow cards={cards(example)} />
             <p>{note}</p>
           </li>

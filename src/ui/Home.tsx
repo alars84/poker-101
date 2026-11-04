@@ -51,7 +51,7 @@ export function Home({ drills, score, onOpenDrill, onOpenRankings }: Props) {
       </div>
 
       <button type="button" className="link-button" onClick={onOpenRankings}>
-        Hand rankings chart
+        Hand rankings quiz
       </button>
 
       <ScorePanel score={score} />

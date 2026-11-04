@@ -45,11 +45,11 @@ describe('App', () => {
     expect(screen.queryByRole('button', { name: /Start/ })).not.toBeInTheDocument()
   })
 
-  it('opens the rankings from home and comes back', async () => {
+  it('opens the rankings quiz from home and comes back', async () => {
     const user = open()
 
-    await user.click(button('Hand rankings chart'))
-    expect(screen.getByRole('heading', { name: 'Royal flush' })).toBeVisible()
+    await user.click(button('Hand rankings quiz'))
+    expect(button('Submit')).toBeVisible()
 
     await user.click(button('Back to home'))
     expect(button('Start Who Wins?')).toBeVisible()
@@ -108,7 +108,7 @@ describe('App', () => {
   it('opens the screen named in the URL', () => {
     window.location.hash = '#rankings'
     open()
-    expect(screen.getByRole('heading', { name: 'Royal flush' })).toBeVisible()
+    expect(button('Submit')).toBeVisible()
   })
 
   it('falls back to home for a URL it does not know', () => {

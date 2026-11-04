@@ -3,7 +3,7 @@ import { PracticeRun } from './drills/practiceRun'
 import { ScoreCard } from './drills/scoreCard'
 import { Home, type DrillId } from './ui/Home'
 import { NameTheHandDrill } from './ui/NameTheHandDrill'
-import { RankingsChart } from './ui/RankingsChart'
+import { RankTheHandsQuiz } from './ui/RankTheHandsQuiz'
 import { RulesQuizDrill } from './ui/RulesQuizDrill'
 import { RunScreen, type RunControls } from './ui/RunScreen'
 import { WhoWinsDrill } from './ui/WhoWinsDrill'
@@ -109,7 +109,7 @@ export default function App() {
               Back to home
             </button>
           </div>
-          <RankingsChart />
+          <RankTheHandsQuiz />
         </>
       )}
     </main>

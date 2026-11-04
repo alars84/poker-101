@@ -431,7 +431,7 @@ h1 {
   background: var(--felt);
 }
 
-.ranking h2 {
+.ranking h3 {
   margin: 0;
   font-size: 1rem;
 }
@@ -477,6 +477,114 @@ h1 {
 
 .score dd {
   margin: 0;
+}
+
+.rank-columns {
+  display: grid;
+  gap: 8px;
+}
+
+.rank-columns-submitted {
+  grid-template-columns: 1fr 1fr;
+}
+
+.rank-column {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.rank-column h2 {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+}
+
+/* Equal rows keep both columns lined up spot for spot, even if a name wraps. */
+.rank-list {
+  flex: 1;
+  display: grid;
+  grid-template-rows: repeat(10, 1fr);
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rank-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 42px;
+  padding: 4px 8px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background: var(--felt);
+  user-select: none;
+}
+
+.rank-row-draggable {
+  cursor: grab;
+}
+
+.rank-row-dragging {
+  border-color: var(--gold);
+  cursor: grabbing;
+}
+
+.rank-row-right {
+  border-color: var(--correct);
+  background: color-mix(in srgb, var(--correct) 22%, var(--felt));
+}
+
+.rank-row-wrong {
+  border-color: var(--wrong);
+  background: color-mix(in srgb, var(--card-red) 45%, var(--felt));
+}
+
+/* Only the grip claims touches, so a finger on the rest of the list still scrolls the page. */
+.rank-handle {
+  flex: none;
+  padding: 4px 6px;
+  border: 0;
+  background: none;
+  color: var(--ink-muted);
+  cursor: inherit;
+  touch-action: none;
+}
+
+.rank-number {
+  flex: none;
+  min-width: 1.2em;
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+  text-align: right;
+}
+
+.rank-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.rank-column .rank-name {
+  font-size: 0.95rem;
+}
+
+.rank-mark {
+  flex: none;
+  font-weight: 700;
+}
+
+.rank-row-right .rank-mark {
+  color: var(--correct);
+}
+
+.rank-row-wrong .rank-mark {
+  color: var(--wrong);
+}
+
+.rank-examples-heading {
+  margin: 8px 0 4px;
+  font-size: 1.1rem;
 }
 
 /* Touch screens keep :hover on the last tapped button, which would read as a selection. */

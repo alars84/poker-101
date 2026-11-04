@@ -42,7 +42,7 @@ export class PracticeRun {
 
 export const PRACTICE_TIPS: Record<string, string> = {
   // Who Wins? scenarios
-  'Different hands': "Name each player's best five first, then compare them on the rankings chart.",
+  'Different hands': "Name each player's best five first, then compare them using the hand rankings.",
   'Higher rank': 'Same hand type? Compare the top of the hand first: the higher pair, set, or straight wins.',
   Kicker: 'When the made hands tie, compare the side cards from highest down, and stop at five cards.',
   'Split pot': 'If two best fives match rank for rank, suits never break the tie, so the pot splits.',

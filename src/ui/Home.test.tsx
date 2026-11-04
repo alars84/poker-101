@@ -58,12 +58,12 @@ describe('Home', () => {
     expect(screen.getByRole('button', { name: 'Start Rules Quiz' })).toBeInTheDocument()
   })
 
-  it('links to the rankings chart', async () => {
+  it('links to the rankings quiz', async () => {
     const user = userEvent.setup()
     const onOpenRankings = vi.fn()
     renderHome({ onOpenRankings })
 
-    await user.click(screen.getByRole('button', { name: 'Hand rankings chart' }))
+    await user.click(screen.getByRole('button', { name: 'Hand rankings quiz' }))
 
     expect(onOpenRankings).toHaveBeenCalledOnce()
   })
