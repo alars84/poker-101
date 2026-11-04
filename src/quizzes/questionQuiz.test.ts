@@ -1,4 +1,4 @@
-import { seededRng } from '../testing/seededRng'
+import { seededRng } from '../domain/seededRng'
 import { isCorrectOption, QuestionQuiz, type QuizQuestion } from './questionQuiz'
 import { PLAYER_QUESTIONS, PLAYER_TOPICS } from './playerQuestions'
 import { PRACTICE_TIPS } from './practiceRun'

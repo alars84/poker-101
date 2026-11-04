@@ -1,6 +1,6 @@
 import { evaluateBestHand, isStraightOrBetter } from '../domain/hand'
 import { chanceToHit, priceToCall } from '../domain/potOdds'
-import { seededRng } from '../testing/seededRng'
+import { seededRng } from '../domain/seededRng'
 import { dealOutsRound, potOddsChoices, UNSEEN_ON_TURN, type PotOddsSpot } from './outsAndOdds'
 import { PRACTICE_TIPS } from './practiceRun'
 

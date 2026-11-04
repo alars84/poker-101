@@ -13,12 +13,25 @@ type Props = {
   run: PracticeRun
   onAnswered: (topic: string, correct: boolean) => void
   onFinish: () => void
-  onRestart: () => void
+  /** Left out for a run that can only be played once. */
+  onRestart?: () => void
   onExit: () => void
+  onOpenSection: (id: string) => void
+  summaryExtra?: ReactNode
   children: (controls: RunControls) => ReactNode
 }
 
-export function RunScreen({ title, run, onAnswered, onFinish, onRestart, onExit, children }: Props) {
+export function RunScreen({
+  title,
+  run,
+  onAnswered,
+  onFinish,
+  onRestart,
+  onExit,
+  onOpenSection,
+  summaryExtra,
+  children,
+}: Props) {
   const { answered, correct, isLastRound, status } = run
   return (
     <div className="run-screen">
@@ -32,7 +45,13 @@ export function RunScreen({ title, run, onAnswered, onFinish, onRestart, onExit,
       </div>
 
       {status === 'finished' ? (
-        <RunSummary score={run.score} onRestart={onRestart} onExit={onExit} />
+        <RunSummary
+          score={run.score}
+          onRestart={onRestart}
+          onExit={onExit}
+          onOpenSection={onOpenSection}
+          extra={summaryExtra}
+        />
       ) : (
         <>
           <div className="progress">

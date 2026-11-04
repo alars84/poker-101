@@ -1,6 +1,6 @@
 import { compareHands, evaluateBestHand } from '../domain/hand'
 import { BOARD_TEXTURES, boardTexture, possibleHandTiers } from '../domain/bestPossibleHand'
-import { seededRng } from '../testing/seededRng'
+import { seededRng } from '../domain/seededRng'
 import { bestPossibleTopic, dealBestPossibleRound } from './bestPossibleHand'
 import { PRACTICE_TIPS } from './practiceRun'
 

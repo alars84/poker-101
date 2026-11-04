@@ -4,9 +4,9 @@ export function ScorePanel({ score }: { score: ScoreCard }) {
   const { correct, attempts } = score.total()
   if (attempts === 0) return null
   return (
-    <section className="score" aria-label="Session score">
+    <section className="score" aria-label="Your score">
       <h2>
-        This session: {correct} of {attempts} correct
+        Your score: {correct} of {attempts} correct
       </h2>
       <dl>
         {score.topics().map((topic) => (

@@ -1,6 +1,6 @@
 import { cards } from '../domain/card'
 import { resolveShowdown } from '../domain/showdown'
-import { seededRng } from '../testing/seededRng'
+import { seededRng } from '../domain/seededRng'
 import { dealWhoWinsRound, isCorrectPick, type ShowdownRound } from './whoWins'
 
 function round(board: string, ...holeCards: string[]): ShowdownRound {

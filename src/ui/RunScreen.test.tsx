@@ -29,7 +29,15 @@ function FakeQuiz({ onAnswered, isLastRound, onFinish }: RunControls) {
 }
 
 /** Holds the run the way App does. */
-function Harness({ onAnswered, onExit }: { onAnswered: RunControls['onAnswered']; onExit: () => void }) {
+function Harness({
+  onAnswered,
+  onExit,
+  onOpenSection,
+}: {
+  onAnswered: RunControls['onAnswered']
+  onExit: () => void
+  onOpenSection: (id: string) => void
+}) {
   const [run, setRun] = useState(() => new PracticeRun())
   return (
     <RunScreen
@@ -42,14 +50,19 @@ function Harness({ onAnswered, onExit }: { onAnswered: RunControls['onAnswered']
       onFinish={() => setRun(run.finish())}
       onRestart={() => setRun(new PracticeRun())}
       onExit={onExit}
+      onOpenSection={onOpenSection}
     >
       {(controls) => <FakeQuiz {...controls} />}
     </RunScreen>
   )
 }
 
-function renderRun(onAnswered: RunControls['onAnswered'] = () => {}, onExit = () => {}) {
-  render(<Harness onAnswered={onAnswered} onExit={onExit} />)
+function renderRun(
+  onAnswered: RunControls['onAnswered'] = () => {},
+  onExit = () => {},
+  onOpenSection: (id: string) => void = () => {},
+) {
+  render(<Harness onAnswered={onAnswered} onExit={onExit} onOpenSection={onOpenSection} />)
   return userEvent.setup()
 }
 
@@ -99,6 +112,32 @@ describe('PracticeRun progress', () => {
   })
 })
 
+describe('a run that can only be played once', () => {
+  const finished = () => {
+    let run = new PracticeRun()
+    for (let i = 0; i < 10; i++) run = run.record('Kicker', true)
+    return run.finish()
+  }
+
+  it('offers no second try, and shows what the caller adds to the summary', () => {
+    render(
+      <RunScreen
+        title="Daily"
+        run={finished()}
+        onAnswered={() => {}}
+        onFinish={() => {}}
+        onExit={() => {}}
+        onOpenSection={() => {}}
+        summaryExtra={<p>Share this</p>}
+      >
+        {() => null}
+      </RunScreen>,
+    )
+    expect(screen.queryByRole('button', { name: 'Practice again' })).not.toBeInTheDocument()
+    expect(screen.getByText('Share this')).toBeInTheDocument()
+  })
+})
+
 describe('the end of a run', () => {
   it('keeps playing until the tenth answer', async () => {
     const user = renderRun()
@@ -119,6 +158,25 @@ describe('the end of a run', () => {
     await click(user, 'See results')
     expect(screen.getByRole('heading', { name: '7 of 10 correct' })).toBeInTheDocument()
     expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+  })
+
+  it('links each missed topic to the How To section that teaches it', async () => {
+    const onOpenSection = vi.fn()
+    const user = renderRun(() => {}, () => {}, onOpenSection)
+    await answerRounds(user, Array<string>(10).fill('Wrong kicker'))
+    await click(user, 'See results')
+
+    await click(user, 'Read up: Comparing hands')
+
+    expect(onOpenSection).toHaveBeenCalledExactlyOnceWith('comparing-hands')
+  })
+
+  it('links a section only once when several missed topics share it', async () => {
+    const user = renderRun()
+    await answerRounds(user, [...Array<string>(5).fill('Wrong kicker'), ...Array<string>(5).fill('Wrong split')])
+    await click(user, 'See results')
+
+    expect(screen.getAllByRole('button', { name: /^Read up:/ })).toHaveLength(1)
   })
 
   it('lists what tripped you up, worst first, with how often and a tip', async () => {

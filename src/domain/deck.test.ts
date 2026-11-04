@@ -1,5 +1,5 @@
 import { cardLabel } from './card'
-import { seededRng } from '../testing/seededRng'
+import { seededRng } from './seededRng'
 import { Deck, shuffled } from './deck'
 
 const labels = (deck: Deck, count: number) => deck.deal(count).map(cardLabel)

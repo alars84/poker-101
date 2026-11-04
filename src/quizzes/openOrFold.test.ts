@@ -1,6 +1,6 @@
 import { startingHandOf } from '../domain/startingHand'
 import { earliestOpeningSeat, SEATS, shouldOpen } from '../domain/openingChart'
-import { seededRng } from '../testing/seededRng'
+import { seededRng } from '../domain/seededRng'
 import { dealOpenOrFoldRound, isCorrectDecision, openOrFoldTopic } from './openOrFold'
 import { PRACTICE_TIPS } from './practiceRun'
 

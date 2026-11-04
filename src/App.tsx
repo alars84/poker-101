@@ -1,8 +1,13 @@
 import { useEffect, useState, type ComponentType } from 'react'
+import { HOW_TO_SECTIONS } from './howTo/sections'
+import { challengeFor, dateKey, type DailyChallenge } from './quizzes/dailyChallenge'
 import { PracticeRun } from './quizzes/practiceRun'
-import { ScoreCard } from './quizzes/scoreCard'
+import { GROUP_TITLES, type GroupTitle, type QuizId, type RunQuizId } from './quizzes/quizCatalog'
+import { loadProgress, saveProgress } from './quizzes/savedProgress'
 import { BestPossibleHandQuiz } from './ui/BestPossibleHandQuiz'
-import { Home, type HomeQuizGroup, type QuizId, type RunQuizId } from './ui/Home'
+import { DailyQuiz } from './ui/DailyQuiz'
+import { Home, type HomeQuizGroup } from './ui/Home'
+import { HowToIndex, HowToSectionView } from './ui/HowTo'
 import { NameTheHandQuiz } from './ui/NameTheHandQuiz'
 import { OpenOrFoldQuiz } from './ui/OpenOrFoldQuiz'
 import { OutsAndOddsQuiz } from './ui/OutsAndOddsQuiz'
@@ -10,13 +15,12 @@ import { RankTheHandsQuiz } from './ui/RankTheHandsQuiz'
 import { ReadThePlayerQuiz } from './ui/ReadThePlayerQuiz'
 import { RulesQuiz } from './ui/RulesQuiz'
 import { RunScreen, type RunControls } from './ui/RunScreen'
+import { ShareResult } from './ui/ShareResult'
 import { WhoWinsQuiz } from './ui/WhoWinsQuiz'
-
-const GROUP_TITLES = ['Know the game', 'Read the cards', 'Make the play'] as const
 
 type QuizListing = {
   id: QuizId
-  group: (typeof GROUP_TITLES)[number]
+  group: GroupTitle
   title: string
   description: string
 }
@@ -82,27 +86,27 @@ const QUIZZES: (QuizListing & { id: RunQuizId; Quiz: ComponentType<RunControls> 
   },
 ]
 
-type View = 'home' | QuizId
+type View = 'home' | QuizId | 'daily' | 'how-to' | `how-to/${string}`
+
+const sectionView = (id: string): View => `how-to/${id}`
 
 // The URL holds the view so the browser back button returns home, not out of the app.
 function viewFromUrl(): View {
   const hash = window.location.hash.slice(1)
-  if (hash === 'rankings') return 'rankings'
+  if (hash === 'rankings' || hash === 'daily' || hash === 'how-to') return hash
+  const section = HOW_TO_SECTIONS.find(({ id }) => sectionView(id) === hash)
+  if (section) return sectionView(section.id)
   return QUIZZES.find((quiz) => quiz.id === hash)?.id ?? 'home'
 }
 
+const shareUrl = () => `${window.location.origin}${window.location.pathname}#daily`
+
 export default function App() {
   const [view, setView] = useState(viewFromUrl)
-  const [score, setScore] = useState(() => new ScoreCard())
-  const [runs, setRuns] = useState<Record<RunQuizId, PracticeRun>>(() => ({
-    'who-wins': new PracticeRun(),
-    'name-the-hand': new PracticeRun(),
-    'rules-quiz': new PracticeRun(),
-    'open-or-fold': new PracticeRun(),
-    'best-possible-hand': new PracticeRun(),
-    'outs-and-odds': new PracticeRun(),
-    'read-the-player': new PracticeRun(),
-  }))
+  const [{ score, runs, daily: savedDaily }, setProgress] = useState(loadProgress)
+  const [today, setToday] = useState(() => dateKey(new Date()))
+  const daily = challengeFor(savedDaily, today)
+  const dailyTitle = QUIZZES.find(({ id }) => id === daily.quiz)?.title ?? ''
 
   useEffect(() => {
     const syncWithUrl = () => setView(viewFromUrl())
@@ -110,9 +114,20 @@ export default function App() {
     return () => window.removeEventListener('hashchange', syncWithUrl)
   }, [])
 
+  // Phones keep tabs open for days, so a returning player may be on a new day.
+  useEffect(() => {
+    const syncWithClock = () => setToday(dateKey(new Date()))
+    document.addEventListener('visibilitychange', syncWithClock)
+    return () => document.removeEventListener('visibilitychange', syncWithClock)
+  }, [])
+
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [view])
+
+  useEffect(() => {
+    saveProgress({ score, runs, daily: savedDaily })
+  }, [score, runs, savedDaily])
 
   const goTo = (next: View) => {
     setView(next)
@@ -120,13 +135,24 @@ export default function App() {
   }
 
   const updateRun = (id: RunQuizId, change: (run: PracticeRun) => PracticeRun) => {
-    setRuns((current) => ({ ...current, [id]: change(current[id]) }))
+    setProgress((current) => ({ ...current, runs: { ...current.runs, [id]: change(current.runs[id]) } }))
+  }
+
+  const updateDaily = (change: (challenge: DailyChallenge) => DailyChallenge) => {
+    setProgress((current) => ({ ...current, daily: change(challengeFor(current.daily, today)) }))
+  }
+
+  const recordScore = (topic: string, correct: boolean) => {
+    setProgress((current) => ({ ...current, score: current.score.record(topic, correct) }))
   }
 
   const openQuiz = (id: QuizId) => {
     if (id !== 'rankings' && runs[id].status === 'finished') updateRun(id, () => new PracticeRun())
     goTo(id)
   }
+
+  const openSection = (id: string) => goTo(sectionView(id))
+  const openedSection = HOW_TO_SECTIONS.find(({ id }) => sectionView(id) === view)
 
   const homeGroups: HomeQuizGroup[] = GROUP_TITLES.map((title) => ({
     title,
@@ -143,7 +169,15 @@ export default function App() {
   return (
     <main className="app">
       {view === 'home' && (
-        <Home groups={homeGroups} score={score} onOpenQuiz={openQuiz} />
+        <Home
+          groups={homeGroups}
+          score={score}
+          onOpenQuiz={openQuiz}
+          onOpenHowTo={() => goTo('how-to')}
+          daily={daily}
+          dailyTitle={dailyTitle}
+          onOpenDaily={() => goTo('daily')}
+        />
       )}
 
       {/* Hidden rather than unmounted, so leaving a quiz keeps the hand on the table. */}
@@ -154,16 +188,40 @@ export default function App() {
             run={runs[id]}
             onAnswered={(topic, correct) => {
               updateRun(id, (run) => run.record(topic, correct))
-              setScore((current) => current.record(topic, correct))
+              recordScore(topic, correct)
             }}
             onFinish={() => updateRun(id, (run) => run.finish())}
             onRestart={() => updateRun(id, () => new PracticeRun())}
             onExit={() => goTo('home')}
+            onOpenSection={openSection}
           >
             {(controls) => <Quiz {...controls} />}
           </RunScreen>
         </div>
       ))}
+
+      {view === 'daily' && (
+        <RunScreen
+          title={`Daily Challenge: ${dailyTitle}`}
+          run={daily.run}
+          onAnswered={(topic, correct) => {
+            updateDaily((challenge) => challenge.record(topic, correct))
+            recordScore(topic, correct)
+          }}
+          onFinish={() => updateDaily((challenge) => challenge.finish())}
+          onExit={() => goTo('home')}
+          onOpenSection={openSection}
+          summaryExtra={<ShareResult text={daily.shareText(dailyTitle, shareUrl())} />}
+        >
+          {(controls) => <DailyQuiz challenge={daily} {...controls} />}
+        </RunScreen>
+      )}
+
+      {view === 'how-to' && <HowToIndex onOpenSection={openSection} onExit={() => goTo('home')} />}
+
+      {openedSection && (
+        <HowToSectionView section={openedSection} onPractice={openQuiz} onExit={() => goTo('how-to')} />
+      )}
 
       {view === 'rankings' && (
         <>

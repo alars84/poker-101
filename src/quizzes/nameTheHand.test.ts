@@ -1,4 +1,4 @@
-import { seededRng } from '../testing/seededRng'
+import { seededRng } from '../domain/seededRng'
 import { dealNameTheHandRound, isCorrectName } from './nameTheHand'
 
 describe('dealNameTheHandRound', () => {

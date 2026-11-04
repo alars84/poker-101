@@ -1,5 +1,5 @@
 import { SHOWDOWN_SCENARIOS } from '../domain/showdown'
-import { seededRng } from '../testing/seededRng'
+import { seededRng } from '../domain/seededRng'
 import { dealForScenario, SCENARIO_LABELS } from './scenario'
 
 const names = ['Ana', 'Ben']

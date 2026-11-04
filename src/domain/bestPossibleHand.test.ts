@@ -2,7 +2,7 @@ import { cards, type Card } from './card'
 import { Deck } from './deck'
 import { boardTexture, possibleHandTiers } from './bestPossibleHand'
 import { compareHands } from './hand'
-import { seededRng } from '../testing/seededRng'
+import { seededRng } from './seededRng'
 
 const best = (board: string) => possibleHandTiers(cards(board))[0][0]
 

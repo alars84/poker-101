@@ -447,6 +447,11 @@ h1 {
   margin-bottom: 4px;
 }
 
+.summary li .link-button {
+  padding: 4px 0 0;
+  font-size: 0.9rem;
+}
+
 .summary-topic span {
   flex: none;
   color: var(--wrong);
@@ -646,4 +651,43 @@ h1 {
     height: 64px;
     font-size: 1rem;
   }
+}
+
+.how-to-points {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 0 16px;
+}
+
+.how-to-point {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--felt);
+}
+
+.how-to-point h2 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+
+.how-to-point p {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+.share-result {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.share-result pre {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--felt);
+  font: inherit;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
 }

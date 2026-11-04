@@ -1,5 +1,5 @@
 import { HAND_CATEGORIES } from '../domain/hand'
-import { seededRng } from '../testing/seededRng'
+import { seededRng } from '../domain/seededRng'
 import { countInRightSpot, isInRightSpot, moveHand, shuffledHands, STRONGEST_FIRST } from './rankTheHands'
 
 describe('rank the hands', () => {

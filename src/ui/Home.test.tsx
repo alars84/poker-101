@@ -1,7 +1,8 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { vi } from 'vitest'
-import { PracticeRun } from '../quizzes/practiceRun'
+import { DailyChallenge } from '../quizzes/dailyChallenge'
+import { PracticeRun, RUN_LENGTH } from '../quizzes/practiceRun'
 import { ScoreCard } from '../quizzes/scoreCard'
 import { Home, type HomeQuiz, type HomeQuizGroup } from './Home'
 
@@ -16,8 +17,16 @@ const rankings: HomeQuiz = { id: 'rankings', title: 'Hand Rankings Quiz', descri
 
 const groupOf = (...quizzes: HomeQuiz[]): HomeQuizGroup[] => [{ title: 'Know the game', quizzes }]
 
+const TODAY = '2026-11-04'
+
+const dailyAfter = (answers: number) => {
+  let daily = new DailyChallenge(TODAY)
+  for (let i = 0; i < answers; i++) daily = daily.record('Kicker', i > 0)
+  return daily
+}
+
 const renderHome = (overrides: Partial<Parameters<typeof Home>[0]> = {}) =>
-  render(<Home groups={groupOf(quiz())} score={new ScoreCard()} onOpenQuiz={() => {}} {...overrides} />)
+  render(<Home groups={groupOf(quiz())} score={new ScoreCard()} onOpenQuiz={() => {}} onOpenHowTo={() => {}} daily={new DailyChallenge(TODAY)} dailyTitle="Who Wins?" onOpenDaily={() => {}} {...overrides} />)
 
 describe('Home', () => {
   it('carries the app name', () => {
@@ -30,6 +39,38 @@ describe('Home', () => {
     expect(screen.getByRole('heading', { name: 'Want to practice your poker skills?' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Rules Quiz' })).toBeInTheDocument()
     expect(screen.getByText('Blinds and betting.')).toBeInTheDocument()
+  })
+
+  it("names today's daily challenge and starts it", async () => {
+    const user = userEvent.setup()
+    const onOpenDaily = vi.fn()
+    renderHome({ onOpenDaily })
+    expect(screen.getByText(/Today: Who Wins\?/)).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Start Daily Challenge' }))
+
+    expect(onOpenDaily).toHaveBeenCalledOnce()
+  })
+
+  it('offers to resume a daily challenge in progress', () => {
+    renderHome({ daily: dailyAfter(2) })
+    expect(screen.getByRole('button', { name: 'Resume (2 of 10) Daily Challenge' })).toBeInTheDocument()
+  })
+
+  it('shows the result of a finished daily challenge instead of a new try', () => {
+    renderHome({ daily: dailyAfter(RUN_LENGTH).finish() })
+    expect(screen.getByRole('button', { name: 'See result Daily Challenge' })).toBeInTheDocument()
+    expect(screen.getByText(/You got 9 of 10/)).toBeInTheDocument()
+  })
+
+  it('offers the How To', async () => {
+    const user = userEvent.setup()
+    const onOpenHowTo = vi.fn()
+    renderHome({ onOpenHowTo })
+
+    await user.click(screen.getByRole('button', { name: 'Open How To' }))
+
+    expect(onOpenHowTo).toHaveBeenCalledOnce()
   })
 
   it('starts a quiz', async () => {
@@ -79,8 +120,8 @@ describe('Home', () => {
     expect(onOpenQuiz).toHaveBeenCalledExactlyOnceWith('rankings')
   })
 
-  it('shows the session score once there is one', () => {
+  it('shows your score once there is one', () => {
     renderHome({ score: new ScoreCard().record('Betting', true) })
-    expect(screen.getByText('This session: 1 of 1 correct')).toBeInTheDocument()
+    expect(screen.getByText('Your score: 1 of 1 correct')).toBeInTheDocument()
   })
 })

@@ -2,6 +2,8 @@
 
 A phone-friendly Texas Hold'em study app. Practice reading showdowns and naming hands, with extra reps on the spots that cause arguments at the table: kickers, split pots, and the board playing. Then practice decisions: which starting hands to raise, what the board makes possible, whether the price is right to call, and how to read other players.
 
+The How To has short cheat sheets for each topic, and missed topics link straight to them. The Daily Challenge deals everyone the same ten hands, with a result you can paste into the group chat. Progress is saved in the browser.
+
 ## Run it
 
 ```sh
@@ -20,7 +22,8 @@ npm run lint
 ## Layout
 
 - `src/domain`: the poker rules. No React.
-- `src/quizzes`: deals rounds, checks answers, keeps score. No React.
+- `src/quizzes`: deals rounds, checks answers, keeps score, saves progress. No React.
+- `src/howTo`: the How To content. No React.
 - `src/ui`: React components.
 
 ## License
