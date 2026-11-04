@@ -1,18 +1,16 @@
 import { useState } from 'react'
-import { isCorrectOption, RulesQuiz, type QuizRound } from '../drills/rulesQuiz'
+import { isCorrectOption, type QuizRound } from '../quizzes/questionQuiz'
 import { Feedback } from './Feedback'
 
 type Props = {
-  deal?: () => QuizRound
+  intro: string
+  deal: () => QuizRound
   onAnswered: (topic: string, correct: boolean) => void
   isLastRound?: boolean
   onFinish?: () => void
 }
 
-// Lives outside the component so switching tabs doesn't restart the question cycle.
-const sessionQuiz = new RulesQuiz()
-
-export function RulesQuizDrill({ deal = () => sessionQuiz.next(), onAnswered, isLastRound = false, onFinish }: Props) {
+export function QuestionQuizView({ intro, deal, onAnswered, isLastRound = false, onFinish }: Props) {
   const [round, setRound] = useState(() => deal())
   const [answer, setAnswer] = useState<string | null>(null)
 
@@ -28,8 +26,8 @@ export function RulesQuizDrill({ deal = () => sessionQuiz.next(), onAnswered, is
   }
 
   return (
-    <div className="drill">
-      <p className="prompt">Standard no-limit rules. Home games can differ, so agree on house rules before the first hand.</p>
+    <div className="quiz">
+      <p className="prompt">{intro}</p>
 
       <section className="question">
         <p className="question-topic">{question.topic}</p>

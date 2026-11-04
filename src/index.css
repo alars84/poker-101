@@ -67,30 +67,74 @@ h1 {
   color: var(--ink-muted);
 }
 
-.drill-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.quiz-group {
+  margin-bottom: 18px;
 }
 
-.drill-card {
+.quiz-group h2 {
+  margin: 0 0 8px;
+  color: var(--gold);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.quiz-cards {
+  display: grid;
+  gap: 8px;
+}
+
+.quiz-card {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 14px;
-  border-radius: 14px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px 10px 14px;
+  border-radius: 12px;
   background: var(--felt);
 }
 
-.drill-card h3 {
-  margin: 0 0 2px;
-  font-size: 1.1rem;
+.quiz-card-text {
+  min-width: 0;
 }
 
-.drill-card p {
+.quiz-card h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.quiz-card p {
   margin: 0;
   color: var(--ink-muted);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+.quiz-card-action {
+  flex: none;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--gold);
+  color: var(--felt-dark);
+  font-size: 0.9rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Stretches the tap area over the whole card, so the title can stay a real heading. */
+.quiz-card-action::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+}
+
+@media (min-width: 560px) {
+  .quiz-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .link-button {
@@ -99,10 +143,6 @@ h1 {
   background: none;
   color: var(--gold);
   text-decoration: underline;
-}
-
-.home .link-button {
-  margin-top: 8px;
 }
 
 .run-header {
@@ -123,7 +163,7 @@ h1 {
   padding: 4px 0;
 }
 
-.drill {
+.quiz {
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -592,6 +632,10 @@ h1 {
   .option:not(:disabled):hover,
   .seat:not(:disabled):hover {
     background: var(--card-red);
+  }
+
+  .quiz-card:hover {
+    background: var(--felt-light);
   }
 }
 

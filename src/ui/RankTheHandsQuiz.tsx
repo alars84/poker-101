@@ -1,7 +1,7 @@
 import { useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
 import type { HandCategory } from '../domain/hand'
-import { capitalize } from '../drills/capitalize'
-import { countInRightSpot, isInRightSpot, moveHand, shuffledHands, STRONGEST_FIRST } from '../drills/rankTheHands'
+import { capitalize } from '../quizzes/capitalize'
+import { countInRightSpot, isInRightSpot, moveHand, shuffledHands, STRONGEST_FIRST } from '../quizzes/rankTheHands'
 import { Feedback } from './Feedback'
 import { RankingsChart } from './RankingsChart'
 
@@ -51,7 +51,7 @@ export function RankTheHandsQuiz({ deal = shuffledHands }: Props) {
   const rightCount = countInRightSpot(order)
 
   return (
-    <div className="drill">
+    <div className="quiz">
       {!submitted && <p className="prompt">Drag the hands into order, strongest at the top.</p>}
 
       <div className={`rank-columns ${submitted ? 'rank-columns-submitted' : ''}`}>

@@ -3,8 +3,8 @@ import userEvent from '@testing-library/user-event'
 import { vi } from 'vitest'
 import { cards } from '../domain/card'
 import { evaluateBestHand } from '../domain/hand'
-import type { NameTheHandRound } from '../drills/nameTheHand'
-import { NameTheHandDrill } from './NameTheHandDrill'
+import type { NameTheHandRound } from '../quizzes/nameTheHand'
+import { NameTheHandQuiz } from './NameTheHandQuiz'
 
 function round(board: string, holeCards: string): NameTheHandRound {
   const hand = evaluateBestHand(cards(`${board} ${holeCards}`))
@@ -14,15 +14,15 @@ function round(board: string, holeCards: string): NameTheHandRound {
 const flushRound = round('Ah Jh 9h 3d 4c', '7h 2h')
 const option = (name: string) => screen.getByRole('button', { name })
 
-describe('NameTheHandDrill', () => {
+describe('NameTheHandQuiz', () => {
   it('offers all ten hand categories', () => {
-    render(<NameTheHandDrill deal={() => flushRound} onAnswered={() => {}} />)
+    render(<NameTheHandQuiz deal={() => flushRound} onAnswered={() => {}} />)
     expect(screen.getAllByRole('button')).toHaveLength(10)
   })
 
   it('confirms the right category and describes the hand', async () => {
     const user = userEvent.setup()
-    render(<NameTheHandDrill deal={() => flushRound} onAnswered={() => {}} />)
+    render(<NameTheHandQuiz deal={() => flushRound} onAnswered={() => {}} />)
 
     await user.click(option('Flush'))
 
@@ -32,7 +32,7 @@ describe('NameTheHandDrill', () => {
 
   it('corrects the wrong category', async () => {
     const user = userEvent.setup()
-    render(<NameTheHandDrill deal={() => flushRound} onAnswered={() => {}} />)
+    render(<NameTheHandQuiz deal={() => flushRound} onAnswered={() => {}} />)
 
     await user.click(option('Straight'))
 
@@ -42,7 +42,7 @@ describe('NameTheHandDrill', () => {
   it('reports each answer under the hand it really was', async () => {
     const user = userEvent.setup()
     const onAnswered = vi.fn()
-    render(<NameTheHandDrill deal={() => flushRound} onAnswered={onAnswered} />)
+    render(<NameTheHandQuiz deal={() => flushRound} onAnswered={onAnswered} />)
 
     await user.click(option('Pair'))
 
@@ -51,7 +51,7 @@ describe('NameTheHandDrill', () => {
 
   it('freezes the options after the answer, then moves on', async () => {
     const user = userEvent.setup()
-    render(<NameTheHandDrill deal={() => flushRound} onAnswered={() => {}} />)
+    render(<NameTheHandQuiz deal={() => flushRound} onAnswered={() => {}} />)
 
     await user.click(option('Flush'))
     expect(option('Pair')).toBeDisabled()
@@ -63,7 +63,7 @@ describe('NameTheHandDrill', () => {
   it('offers the results instead of another hand on the last round', async () => {
     const user = userEvent.setup()
     const onFinish = vi.fn()
-    render(<NameTheHandDrill deal={() => flushRound} onAnswered={() => {}} isLastRound onFinish={onFinish} />)
+    render(<NameTheHandQuiz deal={() => flushRound} onAnswered={() => {}} isLastRound onFinish={onFinish} />)
 
     await user.click(option('Flush'))
     await user.click(screen.getByRole('button', { name: 'See results' }))

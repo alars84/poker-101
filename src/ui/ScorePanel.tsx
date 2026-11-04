@@ -1,4 +1,4 @@
-import type { ScoreCard } from '../drills/scoreCard'
+import type { ScoreCard } from '../quizzes/scoreCard'
 
 export function ScorePanel({ score }: { score: ScoreCard }) {
   const { correct, attempts } = score.total()

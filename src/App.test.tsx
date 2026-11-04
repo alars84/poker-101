@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { vi } from 'vitest'
 import App from './App'
@@ -23,7 +23,7 @@ describe('App', () => {
     expect(screen.queryByRole('button', { name: 'Lock it in' })).not.toBeInTheDocument()
   })
 
-  it('starts each drill from its card', async () => {
+  it('starts each quiz from its card', async () => {
     const user = open()
 
     await user.click(button('Start Who Wins?'))
@@ -36,6 +36,34 @@ describe('App', () => {
     await user.click(button('Exit'))
     await user.click(button('Start Rules Quiz'))
     expect(screen.getByText(/house rules/)).toBeVisible()
+
+    await user.click(button('Exit'))
+    await user.click(button('Start Open or Fold'))
+    expect(button('Raise')).toBeVisible()
+
+    await user.click(button('Exit'))
+    await user.click(button('Start Best Possible Hand'))
+    expect(screen.getByText(/^(What is|Which hole cards make) the best possible hand/)).toBeVisible()
+
+    await user.click(button('Exit'))
+    await user.click(button('Start Outs and Odds'))
+    expect(screen.getByText(/nothing else does/)).toBeVisible()
+
+    await user.click(button('Exit'))
+    await user.click(button('Start Read the Player'))
+    expect(screen.getByText(/tendencies, not rules/)).toBeVisible()
+  })
+
+  it('groups every quiz on the home page', () => {
+    open()
+    const titlesIn = (group: string) =>
+      within(screen.getByRole('region', { name: group }))
+        .getAllByRole('heading', { level: 3 })
+        .map((heading) => heading.textContent)
+
+    expect(titlesIn('Know the game')).toEqual(['Hand Rankings Quiz', 'Rules Quiz'])
+    expect(titlesIn('Read the cards')).toEqual(['Name the Hand', 'Who Wins?', 'Best Possible Hand'])
+    expect(titlesIn('Make the play')).toEqual(['Open or Fold', 'Outs and Odds', 'Read the Player'])
   })
 
   it('hides the home page during a quiz', async () => {
@@ -48,7 +76,8 @@ describe('App', () => {
   it('opens the rankings quiz from home and comes back', async () => {
     const user = open()
 
-    await user.click(button('Hand rankings quiz'))
+    await user.click(button('Start Hand Rankings Quiz'))
+    expect(screen.getByRole('heading', { level: 1, name: 'Hand Rankings Quiz' })).toBeVisible()
     expect(button('Submit')).toBeVisible()
 
     await user.click(button('Back to home'))
@@ -66,7 +95,7 @@ describe('App', () => {
     expect(progress()).toHaveAttribute('aria-valuenow', '1')
   })
 
-  it('keeps the session score on the home page across drills', async () => {
+  it('keeps the session score on the home page across quizzes', async () => {
     const user = open()
 
     await user.click(button('Start Name the Hand'))

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import { PRACTICE_TIPS, RUN_LENGTH } from '../drills/practiceRun'
-import type { ScoreCard } from '../drills/scoreCard'
+import { PRACTICE_TIPS, RUN_LENGTH } from '../quizzes/practiceRun'
+import type { ScoreCard } from '../quizzes/scoreCard'
 
 type Props = {
   score: ScoreCard

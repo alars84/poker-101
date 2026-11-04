@@ -65,4 +65,24 @@ export const PRACTICE_TIPS: Record<string, string> = {
   Betting: 'A raise must add at least as much as the last raise. Say "raise" before you reach for chips.',
   'All-ins and side pots': 'You can only win from each player what you put in yourself. Split the pot at each all-in amount.',
   Showdowns: 'The last bettor shows first, the cards speak, and any five of the seven cards can play.',
+
+  // Open or Fold seats
+  'Early position': 'Many players act after you, so stick to pairs of 7s or better and your strongest big cards.',
+  'Middle position': 'Add smaller pairs and more suited hands, but keep folding weak aces and most offsuit cards.',
+  'Late position': 'Few players are left to act, so open much wider: any pair, any suited ace, and connected suited cards.',
+
+  // Best Possible Hand textures
+  'Paired boards': 'A pair on the board means four of a kind is possible, and that beats any full house.',
+  'Flush boards': 'Three of a suit on the board means a flush is possible. Then check for a straight flush.',
+  'Straight boards': 'Look for three board cards within a five-card span. Two hole cards can fill in the rest.',
+  'Dry boards': 'With no pair, no three of a suit, and no three close ranks, top set is the best hand.',
+
+  // Outs and Odds topics
+  'Counting outs': 'Add up your draws: 9 for a flush, 8 for an open-ended straight, 4 for a gutshot. Count shared cards once.',
+  'Pot odds': 'Divide the call by the final pot, then compare it to your outs times 2. Call only if your chance is bigger.',
+
+  // Read the Player topics
+  'Player types': 'Ask two things: how many hands do they play (tight or loose), and do they bet or just call (aggressive or passive)?',
+  Adjusting: 'Bet for value against players who call too much, and bluff players who fold too much.',
+  'Reading the betting': 'Compare a bet to that player\'s usual pattern. A sudden change usually means a strong hand.',
 }

@@ -2,11 +2,11 @@ import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { vi } from 'vitest'
-import { PracticeRun } from '../drills/practiceRun'
+import { PracticeRun } from '../quizzes/practiceRun'
 import { RunScreen, type RunControls } from './RunScreen'
 
-/** Stands in for a drill: one button per kind of answer, then a next button. */
-function FakeDrill({ onAnswered, isLastRound, onFinish }: RunControls) {
+/** Stands in for a quiz: one button per kind of answer, then a next button. */
+function FakeQuiz({ onAnswered, isLastRound, onFinish }: RunControls) {
   const [answered, setAnswered] = useState(false)
   const answer = (topic: string, correct: boolean) => {
     onAnswered(topic, correct)
@@ -33,7 +33,7 @@ function Harness({ onAnswered, onExit }: { onAnswered: RunControls['onAnswered']
   const [run, setRun] = useState(() => new PracticeRun())
   return (
     <RunScreen
-      title="Fake Drill"
+      title="Fake Quiz"
       run={run}
       onAnswered={(topic, correct) => {
         setRun(run.record(topic, correct))
@@ -43,7 +43,7 @@ function Harness({ onAnswered, onExit }: { onAnswered: RunControls['onAnswered']
       onRestart={() => setRun(new PracticeRun())}
       onExit={onExit}
     >
-      {(controls) => <FakeDrill {...controls} />}
+      {(controls) => <FakeQuiz {...controls} />}
     </RunScreen>
   )
 }
@@ -81,10 +81,10 @@ describe('PracticeRun progress', () => {
     expect(screen.getByText('2 correct')).toBeInTheDocument()
   })
 
-  it('names the drill and offers a way out', async () => {
+  it('names the quiz and offers a way out', async () => {
     const onExit = vi.fn()
     const user = renderRun(() => {}, onExit)
-    expect(screen.getByRole('heading', { name: 'Fake Drill' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Fake Quiz' })).toBeInTheDocument()
 
     await click(user, 'Exit')
 

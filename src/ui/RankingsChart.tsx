@@ -1,6 +1,6 @@
 import { cards } from '../domain/card'
 import type { HandCategory } from '../domain/hand'
-import { capitalize } from '../drills/capitalize'
+import { capitalize } from '../quizzes/capitalize'
 import { CardRow } from './CardView'
 
 const STRONGEST_FIRST: { category: HandCategory; example: string; note: string }[] = [

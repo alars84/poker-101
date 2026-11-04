@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { describeHand, explainShowdown } from '../domain/explanation'
-import { SCENARIO_LABELS } from '../drills/scenario'
-import { dealWhoWinsRound, isCorrectPick } from '../drills/whoWins'
+import { SCENARIO_LABELS } from '../quizzes/scenario'
+import { dealWhoWinsRound, isCorrectPick } from '../quizzes/whoWins'
 import { CardRow } from './CardView'
 import { Feedback } from './Feedback'
 
@@ -12,7 +12,7 @@ type Props = {
   onFinish?: () => void
 }
 
-export function WhoWinsDrill({ deal = dealWhoWinsRound, onAnswered, isLastRound = false, onFinish }: Props) {
+export function WhoWinsQuiz({ deal = dealWhoWinsRound, onAnswered, isLastRound = false, onFinish }: Props) {
   const [round, setRound] = useState(() => deal())
   const [picks, setPicks] = useState<readonly string[]>([])
   const [answered, setAnswered] = useState(false)
@@ -35,7 +35,7 @@ export function WhoWinsDrill({ deal = dealWhoWinsRound, onAnswered, isLastRound 
   }
 
   return (
-    <div className="drill">
+    <div className="quiz">
       <p className="prompt">Who takes the pot? Pick more than one player for a split.</p>
 
       <section className="board" aria-label="Board">

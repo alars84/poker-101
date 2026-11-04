@@ -1,7 +1,8 @@
 import { cards } from './card'
-import { describeHand, explainShowdown } from './explanation'
+import { describeHand, explainOpening, explainOuts, explainPotOdds, explainShowdown } from './explanation'
 import { evaluateBestHand } from './hand'
 import { resolveShowdown, type Player } from './showdown'
+import { startingHandOf } from './startingHand'
 
 const player = (name: string, holeCards: string): Player => ({ name, holeCards: cards(holeCards) })
 const explain = (board: string, ...players: Player[]) => explainShowdown(resolveShowdown(cards(board), players))
@@ -67,5 +68,53 @@ describe('explainShowdown', () => {
     expect(explain('Ah Kd Qc Js Th', player('Ana', '2s 3d'), player('Ben', '4d 5c'))).toBe(
       'The board makes a straight to the ace. No hole card beats it, so everyone splits the pot.',
     )
+  })
+})
+
+describe('explainOpening', () => {
+  const hand = (shorthand: string) => startingHandOf(cards(shorthand))
+
+  it('says where a hand opens and why', () => {
+    expect(explainOpening(hand('Kh Qd'))).toBe(
+      'KQo (offsuit) opens from middle position or later. Big cards make strong top pairs, but a weak kicker can lose a big pot.',
+    )
+  })
+
+  it('says when every seat opens a hand', () => {
+    expect(explainOpening(hand('Ah Ad'))).toMatch(/^AA opens from any seat\./)
+  })
+
+  it('says when only the latest seats open a hand', () => {
+    expect(explainOpening(hand('2h 2d'))).toMatch(/^22 opens from late position only\./)
+  })
+
+  it('says when no seat opens a hand', () => {
+    expect(explainOpening(hand('7h 2d'))).toMatch(/^72o \(offsuit\) doesn't open from any seat\./)
+  })
+
+  it('spells out suited hands', () => {
+    expect(explainOpening(hand('Ah 5h'))).toMatch(/^A5s \(suited\)/)
+  })
+})
+
+describe('explainOuts', () => {
+  it('uses the rule of 4 with two cards to come', () => {
+    expect(explainOuts(9, 2)).toBe('You have 9 outs. With two cards to come, multiply by 4: about 36%.')
+  })
+
+  it('uses the rule of 2 with one card to come', () => {
+    expect(explainOuts(8, 1)).toBe('You have 8 outs. With one card to come, multiply by 2: about 16%.')
+  })
+})
+
+describe('explainPotOdds', () => {
+  it('compares the price to the chance of hitting', () => {
+    expect(explainPotOdds(9, 120, 20)).toBe(
+      'Your $20 call goes into a final pot of $140, so you need to hit about 14% of the time. 9 outs times 2 is about 18%, so call.',
+    )
+  })
+
+  it('says to fold when the price is too high', () => {
+    expect(explainPotOdds(4, 40, 20)).toMatch(/you need to hit about 33% of the time\. 4 outs times 2 is about 8%, so fold\.$/)
   })
 })

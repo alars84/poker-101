@@ -1,7 +1,6 @@
 import { shuffled, type Rng } from '../domain/deck'
-import { RULES_QUESTIONS } from './rulesQuestions'
 
-export type RulesQuestion = {
+export type QuizQuestion = {
   readonly topic: string
   readonly prompt: string
   readonly answer: string
@@ -10,17 +9,17 @@ export type RulesQuestion = {
 }
 
 export type QuizRound = {
-  readonly question: RulesQuestion
+  readonly question: QuizQuestion
   readonly options: readonly string[]
 }
 
-export class RulesQuiz {
-  readonly #questions: readonly RulesQuestion[]
+export class QuestionQuiz {
+  readonly #questions: readonly QuizQuestion[]
   readonly #rng: Rng
-  #remaining: RulesQuestion[] = []
-  #last: RulesQuestion | null = null
+  #remaining: QuizQuestion[] = []
+  #last: QuizQuestion | null = null
 
-  constructor(questions: readonly RulesQuestion[] = RULES_QUESTIONS, rng: Rng = Math.random) {
+  constructor(questions: readonly QuizQuestion[], rng: Rng = Math.random) {
     this.#questions = questions
     this.#rng = rng
   }

@@ -44,6 +44,10 @@ export function compareHands(a: Hand, b: Hand): number {
   return 0
 }
 
+export function isStraightOrBetter(hand: Hand): boolean {
+  return HAND_CATEGORIES.indexOf(hand.category) >= HAND_CATEGORIES.indexOf('straight')
+}
+
 function fiveCardCombinations(cards: readonly Card[]): Card[][] {
   const combinations: Card[][] = []
   const choose = (start: number, chosen: Card[]) => {

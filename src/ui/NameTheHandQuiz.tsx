@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { describeHand } from '../domain/explanation'
 import { HAND_CATEGORIES, type HandCategory } from '../domain/hand'
-import { dealNameTheHandRound, isCorrectName } from '../drills/nameTheHand'
+import { dealNameTheHandRound, isCorrectName } from '../quizzes/nameTheHand'
 import { CardRow } from './CardView'
 import { Feedback } from './Feedback'
-import { capitalize } from '../drills/capitalize'
+import { capitalize } from '../quizzes/capitalize'
 
 type Props = {
   deal?: typeof dealNameTheHandRound
@@ -15,7 +15,7 @@ type Props = {
 
 const STRONGEST_FIRST = [...HAND_CATEGORIES].reverse()
 
-export function NameTheHandDrill({ deal = dealNameTheHandRound, onAnswered, isLastRound = false, onFinish }: Props) {
+export function NameTheHandQuiz({ deal = dealNameTheHandRound, onAnswered, isLastRound = false, onFinish }: Props) {
   const [round, setRound] = useState(() => deal())
   const [answer, setAnswer] = useState<HandCategory | null>(null)
 
@@ -32,7 +32,7 @@ export function NameTheHandDrill({ deal = dealNameTheHandRound, onAnswered, isLa
   }
 
   return (
-    <div className="drill">
+    <div className="quiz">
       <p className="prompt">What's the best five-card hand here?</p>
 
       <section className="board" aria-label="Board">

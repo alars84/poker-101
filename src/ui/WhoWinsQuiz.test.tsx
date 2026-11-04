@@ -3,8 +3,8 @@ import userEvent from '@testing-library/user-event'
 import { vi } from 'vitest'
 import { cards } from '../domain/card'
 import { resolveShowdown } from '../domain/showdown'
-import type { ShowdownRound } from '../drills/whoWins'
-import { WhoWinsDrill } from './WhoWinsDrill'
+import type { ShowdownRound } from '../quizzes/whoWins'
+import { WhoWinsQuiz } from './WhoWinsQuiz'
 
 function round(board: string, ...holeCards: string[]): ShowdownRound {
   const players = holeCards.map((hole, i) => ({ name: ['Ana', 'Ben', 'Cara'][i], holeCards: cards(hole) }))
@@ -17,22 +17,22 @@ const splitRound = round('Kh 9d 5c 3s 2h', 'Ks Qd', 'Kd Qc', '7d 8c')
 const seat = (name: string) => screen.getByRole('button', { name: new RegExp(`^${name}`) })
 const lockIn = () => screen.getByRole('button', { name: 'Lock it in' })
 
-describe('WhoWinsDrill', () => {
+describe('WhoWinsQuiz', () => {
   it('shows the board and every player before an answer', () => {
-    render(<WhoWinsDrill deal={() => kickerRound} onAnswered={() => {}} />)
+    render(<WhoWinsQuiz deal={() => kickerRound} onAnswered={() => {}} />)
     expect(screen.getAllByLabelText(/^[0-9JQKA]+[♠♥♦♣]$/)).toHaveLength(9)
     expect(seat('Ana')).toBeInTheDocument()
     expect(seat('Ben')).toBeInTheDocument()
   })
 
   it('needs a pick before locking in', () => {
-    render(<WhoWinsDrill deal={() => kickerRound} onAnswered={() => {}} />)
+    render(<WhoWinsQuiz deal={() => kickerRound} onAnswered={() => {}} />)
     expect(lockIn()).toBeDisabled()
   })
 
   it('confirms a right answer and explains it', async () => {
     const user = userEvent.setup()
-    render(<WhoWinsDrill deal={() => kickerRound} onAnswered={() => {}} />)
+    render(<WhoWinsQuiz deal={() => kickerRound} onAnswered={() => {}} />)
 
     await user.click(seat('Ana'))
     await user.click(lockIn())
@@ -43,7 +43,7 @@ describe('WhoWinsDrill', () => {
 
   it('corrects a wrong answer', async () => {
     const user = userEvent.setup()
-    render(<WhoWinsDrill deal={() => kickerRound} onAnswered={() => {}} />)
+    render(<WhoWinsQuiz deal={() => kickerRound} onAnswered={() => {}} />)
 
     await user.click(seat('Ben'))
     await user.click(lockIn())
@@ -53,7 +53,7 @@ describe('WhoWinsDrill', () => {
 
   it('takes several picks to call a split pot', async () => {
     const user = userEvent.setup()
-    render(<WhoWinsDrill deal={() => splitRound} onAnswered={() => {}} />)
+    render(<WhoWinsQuiz deal={() => splitRound} onAnswered={() => {}} />)
 
     await user.click(seat('Ana'))
     await user.click(seat('Ben'))
@@ -64,7 +64,7 @@ describe('WhoWinsDrill', () => {
 
   it('lets a player be unpicked', async () => {
     const user = userEvent.setup()
-    render(<WhoWinsDrill deal={() => kickerRound} onAnswered={() => {}} />)
+    render(<WhoWinsQuiz deal={() => kickerRound} onAnswered={() => {}} />)
 
     await user.click(seat('Ben'))
     await user.click(seat('Ben'))
@@ -75,7 +75,7 @@ describe('WhoWinsDrill', () => {
   it('reports the scenario and result once per answer', async () => {
     const user = userEvent.setup()
     const onAnswered = vi.fn()
-    render(<WhoWinsDrill deal={() => kickerRound} onAnswered={onAnswered} />)
+    render(<WhoWinsQuiz deal={() => kickerRound} onAnswered={onAnswered} />)
 
     await user.click(seat('Ana'))
     await user.click(lockIn())
@@ -85,7 +85,7 @@ describe('WhoWinsDrill', () => {
 
   it('shows each best hand after the answer', async () => {
     const user = userEvent.setup()
-    render(<WhoWinsDrill deal={() => kickerRound} onAnswered={() => {}} />)
+    render(<WhoWinsQuiz deal={() => kickerRound} onAnswered={() => {}} />)
 
     await user.click(seat('Ana'))
     await user.click(lockIn())
@@ -95,7 +95,7 @@ describe('WhoWinsDrill', () => {
 
   it('freezes the seats after the answer', async () => {
     const user = userEvent.setup()
-    render(<WhoWinsDrill deal={() => kickerRound} onAnswered={() => {}} />)
+    render(<WhoWinsQuiz deal={() => kickerRound} onAnswered={() => {}} />)
 
     await user.click(seat('Ana'))
     await user.click(lockIn())
@@ -106,7 +106,7 @@ describe('WhoWinsDrill', () => {
   it('moves on to a fresh hand', async () => {
     const user = userEvent.setup()
     const deal = vi.fn().mockReturnValueOnce(kickerRound).mockReturnValue(splitRound)
-    render(<WhoWinsDrill deal={deal} onAnswered={() => {}} />)
+    render(<WhoWinsQuiz deal={deal} onAnswered={() => {}} />)
 
     await user.click(seat('Ana'))
     await user.click(lockIn())
@@ -120,7 +120,7 @@ describe('WhoWinsDrill', () => {
   it('offers the results instead of another hand on the last round', async () => {
     const user = userEvent.setup()
     const onFinish = vi.fn()
-    render(<WhoWinsDrill deal={() => kickerRound} onAnswered={() => {}} isLastRound onFinish={onFinish} />)
+    render(<WhoWinsQuiz deal={() => kickerRound} onAnswered={() => {}} isLastRound onFinish={onFinish} />)
 
     await user.click(seat('Ana'))
     await user.click(lockIn())

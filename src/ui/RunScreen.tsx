@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { RUN_LENGTH, type PracticeRun } from '../drills/practiceRun'
+import { RUN_LENGTH, type PracticeRun } from '../quizzes/practiceRun'
 import { RunSummary } from './RunSummary'
 
 export type RunControls = {

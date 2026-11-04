@@ -1,10 +1,10 @@
-import type { RulesQuestion } from './rulesQuiz'
+import type { QuizQuestion } from './questionQuiz'
 
 export const RULES_TOPICS = ['Blinds and position', 'Betting', 'All-ins and side pots', 'Showdowns'] as const
 
 const [BLINDS, BETTING, ALL_INS, SHOWDOWNS] = RULES_TOPICS
 
-export const RULES_QUESTIONS: readonly RulesQuestion[] = [
+export const RULES_QUESTIONS: readonly QuizQuestion[] = [
   {
     topic: BLINDS,
     prompt: 'Who posts the small blind?',

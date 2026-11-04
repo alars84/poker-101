@@ -2,7 +2,7 @@ import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { vi } from 'vitest'
 import type { HandCategory } from '../domain/hand'
-import { STRONGEST_FIRST } from '../drills/rankTheHands'
+import { STRONGEST_FIRST } from '../quizzes/rankTheHands'
 import { RankTheHandsQuiz } from './RankTheHandsQuiz'
 
 const ROW_HEIGHT = 40

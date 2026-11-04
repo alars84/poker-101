@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { vi } from 'vitest'
-import type { QuizRound } from '../drills/rulesQuiz'
-import { RulesQuizDrill } from './RulesQuizDrill'
+import type { QuizRound } from '../quizzes/questionQuiz'
+import { RulesQuiz } from './RulesQuiz'
 
 const round = (prompt: string): QuizRound => ({
   question: {
@@ -17,9 +17,9 @@ const round = (prompt: string): QuizRound => ({
 
 const option = (name: string) => screen.getByRole('button', { name })
 
-describe('RulesQuizDrill', () => {
+describe('RulesQuiz', () => {
   it('shows the question, its topic, and its options', () => {
-    render(<RulesQuizDrill deal={() => round('What is the minimum?')} onAnswered={() => {}} />)
+    render(<RulesQuiz deal={() => round('What is the minimum?')} onAnswered={() => {}} />)
     expect(screen.getByText('What is the minimum?')).toBeInTheDocument()
     expect(screen.getByText('Betting')).toBeInTheDocument()
     expect(screen.getAllByRole('button')).toHaveLength(3)
@@ -27,7 +27,7 @@ describe('RulesQuizDrill', () => {
 
   it('confirms the right answer and explains it', async () => {
     const user = userEvent.setup()
-    render(<RulesQuizDrill deal={() => round('What is the minimum?')} onAnswered={() => {}} />)
+    render(<RulesQuiz deal={() => round('What is the minimum?')} onAnswered={() => {}} />)
 
     await user.click(option('Raise to $10'))
 
@@ -37,7 +37,7 @@ describe('RulesQuizDrill', () => {
 
   it('corrects a wrong answer', async () => {
     const user = userEvent.setup()
-    render(<RulesQuizDrill deal={() => round('What is the minimum?')} onAnswered={() => {}} />)
+    render(<RulesQuiz deal={() => round('What is the minimum?')} onAnswered={() => {}} />)
 
     await user.click(option('Raise to $8'))
 
@@ -47,7 +47,7 @@ describe('RulesQuizDrill', () => {
   it('reports each answer under the question topic', async () => {
     const user = userEvent.setup()
     const onAnswered = vi.fn()
-    render(<RulesQuizDrill deal={() => round('What is the minimum?')} onAnswered={onAnswered} />)
+    render(<RulesQuiz deal={() => round('What is the minimum?')} onAnswered={onAnswered} />)
 
     await user.click(option('Raise to $12'))
 
@@ -57,7 +57,7 @@ describe('RulesQuizDrill', () => {
   it('freezes the options after the answer, then moves on', async () => {
     const user = userEvent.setup()
     const deal = vi.fn().mockReturnValueOnce(round('First?')).mockReturnValue(round('Second?'))
-    render(<RulesQuizDrill deal={deal} onAnswered={() => {}} />)
+    render(<RulesQuiz deal={deal} onAnswered={() => {}} />)
 
     await user.click(option('Raise to $10'))
     expect(option('Raise to $8')).toBeDisabled()
@@ -70,7 +70,7 @@ describe('RulesQuizDrill', () => {
   it('offers the results instead of another question on the last round', async () => {
     const user = userEvent.setup()
     const onFinish = vi.fn()
-    render(<RulesQuizDrill deal={() => round('Last?')} onAnswered={() => {}} isLastRound onFinish={onFinish} />)
+    render(<RulesQuiz deal={() => round('Last?')} onAnswered={() => {}} isLastRound onFinish={onFinish} />)
 
     await user.click(option('Raise to $10'))
     await user.click(screen.getByRole('button', { name: 'See results' }))
