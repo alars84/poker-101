@@ -22,3 +22,7 @@ npm run lint
 - `src/domain`: the poker rules. No React.
 - `src/drills`: deals rounds, checks answers, keeps score. No React.
 - `src/ui`: React components.
+
+## License
+
+[MIT](LICENSE)
