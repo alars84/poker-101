@@ -479,6 +479,14 @@ h1 {
   margin: 0;
 }
 
+/* Touch screens keep :hover on the last tapped button, which would read as a selection. */
+@media (hover: hover) {
+  .option:not(:disabled):hover,
+  .seat:not(:disabled):hover {
+    background: var(--card-red);
+  }
+}
+
 /* Five cards plus gaps fit a 320px phone at this size. */
 @media (max-width: 380px) {
   .card {
